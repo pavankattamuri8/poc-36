@@ -1,0 +1,22 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '.'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
+    replaceExistingArchive: true
+
+- task: AzureFunctionApp@2
+  inputs:
+    azureSubscription: 'Azure-Service-Connection'
+    appType: 'functionApp'
+    appName: 'poc36-function-12345'
+    package: '$(Build.ArtifactStagingDirectory)/app.zip'
